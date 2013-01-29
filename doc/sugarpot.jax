@@ -33,12 +33,12 @@
 >
 	" 新しい gvim を立ちあげて homu.jpg を XPM 形式で表示する
 	" この場合は拡張子を除いた画像のファイル名がサーバ名になる。
-	:SugarpotPreviewImage homu.jpg
+	:SugarpotPreview homu.jpg
 
 	" ! が付いている場合は g:sugarpot_default_servername に設定されている
 	" サーバ名で起動する
 	" gvim を使いまわす場合はこちらを使用する
-	:SugarpotPreviewImage! homu.jpg
+	:SugarpotPreview! homu.jpg
 
 	" また curl が使用できるなら Web の画像をプレビューする事も出来ます。
 	:SugarpotPreview http://www.vim.org/images/vim_drill_small.JPG
@@ -64,7 +64,7 @@
 ------------------------------------------------------------------------------
 コマンド					*sugarpot-commands*
 
-:SugarpotPreviewImage[!] {filename}		*:SugarpotPreviewImage*
+:SugarpotPreview[!] {filename}			*:SugarpotPreview*
 	[!] が付いていない場合は {filename} から拡張子を除いたファイル名でサー
 	バを起動させます。
 	プレビューする gvim を使いまわす場合は [!] を付けて使用して下さい。
@@ -73,12 +73,12 @@
 	例: >
 		" 新しい gvim を立ちあげて homu.jpg を XPM 形式で表示する
 		" この場合は拡張子を除いた画像のファイル名がサーバ名になる。
-		:SugarpotPreviewImage homu.jpg
+		:SugarpotPreview homu.jpg
 
 		" ! が付いている場合は g:sugarpot_default_servername に設定
 		" されているサーバ名で起動する
 		" gvim を使いまわす場合はこちらを使用する
-		:SugarpotPreviewImage! homu.jpg
+		:SugarpotPreview! homu.jpg
 
 		" Web の画像をプレビューする
 		:SugarpotPreview http://www.vim.org/images/vim_drill_small.JPG
