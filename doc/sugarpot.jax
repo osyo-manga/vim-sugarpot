@@ -1,0 +1,243 @@
+*sugarpot.txt*	Vim で画像を表示するプラグインです
+
+
+
+==============================================================================
+目次						*sugarpot-contents*
+
+概要				|sugarpot-introduction|
+使い方				|sugarpot-usage|
+必要な外部コマンド		|sugarpot-require|
+インターフェース		|sugarpot-interface|
+  コマンド			  |sugarpot-commands|
+  関数				  |sugarpot-functions|
+設定				|sugarpot-setting|
+  変数				  |sugarpot-variables|
+
+
+==============================================================================
+概要						*sugarpot-introduction*
+
+|sugarpot.vim| は |clientserver| を利用して画像ファイルのプレビュー表示を行う
+プラグインです。
+画像プレビューする際に新しく Vim を立ちあげてそこで画像の描画を行います。
+画像ファイルの描画には convert を使用して画像ファイルを XPM ファイルに変換して
+から表示を行っています。
+現在起動してる Vim とは違う Vim で XPM ファイルの描画を行うので作業の妨げにな
+りません。
+
+
+==============================================================================
+使い方						*sugarpot-usage*
+
+>
+	" 新しい gvim を立ちあげて homu.jpg を XPM 形式で表示する
+	" この場合は拡張子を除いた画像のファイル名がサーバ名になる。
+	:SugarpotPreviewImage homu.jpg
+
+	" ! が付いている場合は g:sugarpot_default_servername に設定されている
+	" サーバ名で起動する
+	" gvim を使いまわす場合はこちらを使用する
+	:SugarpotPreviewImage! homu.jpg
+
+	" また curl が使用できるなら Web の画像をプレビューする事も出来ます。
+	:SugarpotPreview http://www.vim.org/images/vim_drill_small.JPG
+<
+
+
+==============================================================================
+必要な外部コマンド				*sugarpot-require*
+
+- start
+	gvim を立ち上げる時に使用します。
+
+- convert
+	画像ファイルを XPM ファイルに変換する時に使用します。
+
+- curl
+	Web から画像ファイルをダウンロードする時に使用します。
+
+
+==============================================================================
+インターフェース				*sugarpot-interface*
+
+------------------------------------------------------------------------------
+コマンド					*sugarpot-commands*
+
+:SugarpotPreviewImage[!] {filename}		*:SugarpotPreviewImage*
+	[!] が付いていない場合は {filename} から拡張子を除いたファイル名でサー
+	バを起動させます。
+	プレビューする gvim を使いまわす場合は [!] を付けて使用して下さい。
+	また、curl が利用できるのであれば URL を渡す事も出来ます。
+
+	例: >
+		" 新しい gvim を立ちあげて homu.jpg を XPM 形式で表示する
+		" この場合は拡張子を除いた画像のファイル名がサーバ名になる。
+		:SugarpotPreviewImage homu.jpg
+
+		" ! が付いている場合は g:sugarpot_default_servername に設定
+		" されているサーバ名で起動する
+		" gvim を使いまわす場合はこちらを使用する
+		:SugarpotPreviewImage! homu.jpg
+
+		" Web の画像をプレビューする
+		:SugarpotPreview http://www.vim.org/images/vim_drill_small.JPG
+	<
+
+:SugarpotClosePreview {server}
+	{server} のプレビューを閉じます。
+	引数がない場合は |g:sugarpot_default_servername| が使用されます。
+
+:SugarpotClosePreviewAll
+	全てのプレビューを閉じます。
+	Vim の終了時にも呼び出されます。
+
+
+------------------------------------------------------------------------------
+関数						*sugarpot-functions*
+
+						*sugarpot#remote#remote_execute()*
+sugarpot#remote#remote_execute({server}, {command})
+	{server} で {command} を実行させます。
+	これは次を実行するのと同様です。
+	: >
+		remote_send({server}, ":".{command}."<CR>")
+	<
+	例: >
+		:call sugarpot#remote#remote_execute("homu", "echo 42")
+	<
+
+sugarpot#remote#start({server} [, {option}])	*sugarpot#remote#start()*
+	{server} 名で gvim を起動し、{server} を返します。
+	{option} には gvim を起動する際に使用するコマンドラインオプションを
+	設定します。
+	また既に {server} が起動していれば gvim は起動しません。
+	例: >
+		" homu という名前の server を起動する
+		:echo sugarpot#remote#start("homu")
+		" コマンドラインオプションを渡す
+		:echo sugarpot#remote#start("mami", "-u NONE -U NONE")
+	<
+
+sugarpot#remote#is_started({server})		*sugarpot#remote#is_started()*
+	{server} が起動していれば 1 を返します。
+	それ以外は 0 を返します。
+
+sugarpot#remote#list()				*sugarpot#remote#list()*
+	|sugarpot#remote#start()| から起動させた利用可能なサーバ名をリストで
+	返します。
+	例：>
+		let server1 = sugarpot#remote#start("homu")
+		call sugarpot#remote#wait_start(server1)
+
+		let server2 = sugarpot#remote#start("homu")
+		call sugarpot#remote#wait_start(server2)
+
+		echo sugarpot#remote#list()
+		" => [server1, serer2]
+	<
+
+sugarpot#remote#quit({server})			*sugarpot#remote#quit()*
+	{server} を終了させます。
+	これは次を実行するのと同様です。
+	: >
+		call sugarpot#remote#remote_execute({server}, "qall!")
+	<
+
+sugarpot#remote#quit_all()			*sugarpot#remote#quit_all()*
+	{server} を終了させます。
+	これは次を実行するのと同様です。
+	: >
+		call sugarpot#remote#remote_execute({server}, "qall!")
+	<
+
+sugarpot#remote#wait_start({server})		*sugarpot#remote#wait_start()*
+	{server} が利用可能になるまで待ちます。
+	|sugarpot#remote#start()| 後に即座に {server} にアクセスする場合にこの
+	関数を使用して利用可能になるまで待って下さい。
+	無効な {server} の場合、処理が終了しないので注意して下さい。
+	例：>
+		let server = sugarpot#remote#start("homu")
+		call sugarpot#remote#wait_start(server)
+		echo remote_expr(server, "1 + 1")
+	<
+
+sugarpot#remote#wait_quit({server})		*sugarpot#remote#wait_quit()*
+	{server} が終了するまで待ちます。
+	無効な {server} の場合、処理が終了しないので注意して下さい。
+
+
+==============================================================================
+設定						*sugarpot-setting*
+
+------------------------------------------------------------------------------
+変数						*sugarpot-variables*
+
+g:g:sugarpot_default_servername 		*g:sugarpot_default_servername*
+	{server} が設定されていない場合に使用されるデフォルトのサーバ名です。
+	Default: >
+		let g:sugarpot_default_servername = "sugarpot_image_preview_server"
+	<
+
+g:sugarpot_font					*g:sugarpot_font*
+	画像を描画する際に使用するフォントです。
+	これに設定されている値が 'guifont' に設定されます。
+	Default: >
+		let g:sugarpot_font = "MS_Gothic:h1"
+	<
+
+g:sugarpot_xpm_cache_directory 			*g:sugarpot_xpm_cache_directory*
+	XPM ファイルを出力するディレクトリです。
+	Default: >
+		let g:sugarpot_xpm_cache_directory = $TEMP
+	<
+
+g:sugarpot_gvim 				*g:sugarpot_gvim*
+	gvim の起動コマンドです。
+	Default: >
+		let g:sugarpot_gvim = "gvim"
+	<
+
+g:sugarpot_gvim_cmd_option			*g:sugarpot_gvim_cmd_option*
+	gvim のコマンドオプションです。
+	Default: >
+		let g:sugarpot_gvim_cmd_option = "-n -u NONE -U NONE -i NONE"
+	<
+
+g:sugarpot_convert 				*g:sugarpot_convert*
+	convert の起動コマンドです。
+	Default: >
+		let g:sugarpot_convert = "50%"
+	<
+
+g:sugarpot_convert_resize 			*g:sugarpot_convert_resize*
+	convert の -resize に渡される値です。
+	|sugarpot_convert_cmd_option| とは別に設定されるので注意して下さい。
+	
+	例: >
+		" 縦横比そのままで拡縮
+		let g:sugarpot_convert_resize = "25%"
+
+		" 幅50%、高さ25%
+		let g:sugarpot_convert_resize = "50%x25%"
+	<
+
+	Default: >
+		let g:sugarpot_convert_resize = "50%"
+	<
+
+g:sugarpot_convert_cmd_option			*g:sugarpot_convert_cmd_option*
+	convert のコマンドオプションです。
+	Default: >
+		let g:sugarpot_convert_cmd_option = ""
+	<
+
+g:sugarpot_curl 				*g:sugarpot_curl*
+	convert のコマンドオプションです。
+	Default: >
+		let g:sugarpot_convert_cmd_option = "curl"
+	<
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
