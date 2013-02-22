@@ -16,8 +16,8 @@ function! s:make_xpm(image)
 		call delete(output)
 	endif
 	try
-		let resize = empty(g:sugarpot_convert_resize) ? "" : "-resize ".g:sugarpot_convert_resize
-		call system(g:sugarpot_convert." ".resize." ".g:sugarpot_convert_cmd_option." ".a:image. " " . output)
+		let resize = empty(g:sugarpot_convert_resize) ? "" : ("-resize ".g:sugarpot_convert_resize)
+		let result = system(g:sugarpot_convert." ".resize." ".g:sugarpot_convert_cmd_option." ".a:image. " " . output)
 	catch /.*/
 		echo v:exception
 	endtry

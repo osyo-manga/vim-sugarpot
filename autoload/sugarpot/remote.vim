@@ -14,7 +14,7 @@ function! sugarpot#remote#start(server, ...)
 		return a:server
 	endif
 	let option = get(a:, 1, "")
-	silent execute '!start '.g:sugarpot_gvim.' --servername '.a:server.' '.option.''
+	silent execute '!' .g:sugarpot_remote_start_cmd .' '.g:sugarpot_gvim.' --servername '.a:server.' '.option.''
 	call add(s:remote_list, a:server)
 	return a:server
 endfunction

@@ -18,7 +18,12 @@ let g:sugarpot_convert            = get(g:, "sugarpot_convert", "convert")
 let g:sugarpot_convert_resize     = get(g:, "sugarpot_convert_resize", "50%")
 let g:sugarpot_convert_cmd_option = get(g:, "sugarpot_convert_cmd_option", "convert")
 
+let g:sugarpot_convert_cmd_option = get(g:, "sugarpot_convert_cmd_option", "convert")
+
 let g:sugarpot_curl = get(g:, "sugarpot_curl", "curl")
+
+let g:sugarpot_remote_start_cmd = get(g:, "sugarpot_remote_start_cmd", "start")
+
 
 command! -nargs=1 -complete=file
 \	SugarpotRenderImage
