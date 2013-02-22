@@ -241,7 +241,7 @@ g:sugarpot_curl 				*g:sugarpot_curl*
 g:sugarpot_remote_start_cmd 			*g:sugarpot_remote_start_cmd*
 	リモート起動する Vim の起動コマンドです。
 	Default: >
-		let g:sugarpot_remote_start_cmd = "curl"
+		let g:sugarpot_remote_start_cmd = "start"
 	<
 
 
