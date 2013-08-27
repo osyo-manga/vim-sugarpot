@@ -14,7 +14,13 @@ function! sugarpot#remote#start(server, ...)
 		return a:server
 	endif
 	let option = get(a:, 1, "")
-	silent execute '!' .g:sugarpot_remote_start_cmd .' '.g:sugarpot_gvim.' --servername '.a:server.' '.option.''
+	let has_vimproc = 0
+	silent! let has_vimproc = vimproc#version()
+	if has_vimproc
+		call vimproc#system_bg(g:sugarpot_gvim.' --servername '.a:server.' '.option.'')
+	else
+		silent execute '!' .g:sugarpot_remote_start_cmd .' '.g:sugarpot_gvim.' --servername '.a:server.' '.option.''
+	endif
 	call add(s:remote_list, a:server)
 	return a:server
 endfunction
