@@ -207,7 +207,7 @@ g:sugarpot_gvim_cmd_option			*g:sugarpot_gvim_cmd_option*
 g:sugarpot_convert 				*g:sugarpot_convert*
 	convert の起動コマンドです。
 	Default: >
-		let g:sugarpot_convert = "50%"
+		let g:sugarpot_convert = "convert"
 	<
 
 g:sugarpot_convert_resize 			*g:sugarpot_convert_resize*
