@@ -7,7 +7,7 @@ let s:is_windows = has('win16') || has('win32') || has('win64')
 
 function! s:make_xpm(image)
 	let name = fnamemodify(a:image, ":t:r")
-	let output_dir = g:sugarpot_xpm_cache_directory."/".name
+	let output_dir = expand(g:sugarpot_xpm_cache_directory."/".name)
 	let output = output_dir."/".name.".xpm"
 	if !isdirectory(output_dir)
 		call mkdir(output_dir, "p")
@@ -84,7 +84,7 @@ function! s:is_url(str)
 endfunction
 
 function! s:download(url)
-	let output_dir = g:sugarpot_xpm_cache_directory."/".fnamemodify(a:url, ":t:r")
+	let output_dir = expand(g:sugarpot_xpm_cache_directory."/".fnamemodify(a:url, ":t:r"))
 	let output = output_dir."/".fnamemodify(a:url, ":t")
 	if !isdirectory(output_dir)
 		call mkdir(output_dir, "p")
@@ -115,7 +115,7 @@ function! s:image_main(file)
 		echoerr "Not found ".a:file
 		return
 	endif
-	if !isdirectory(g:sugarpot_xpm_cache_directory)
+	if !isdirectory(expand(g:sugarpot_xpm_cache_directory))
 		echoerr "Invalid g:sugarpot_xpm_cache_directory : " . g:sugarpot_xpm_cache_directory
 		return
 	endif
