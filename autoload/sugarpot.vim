@@ -10,7 +10,7 @@ function! s:make_xpm(image)
 	let output_dir = g:sugarpot_xpm_cache_directory."/".name
 	let output = output_dir."/".name.".xpm"
 	if !isdirectory(output_dir)
-		call mkdir(output_dir)
+		call mkdir(output_dir, "p")
 	endif
 	if filereadable(output)
 		call delete(output)
@@ -87,7 +87,7 @@ function! s:download(url)
 	let output_dir = g:sugarpot_xpm_cache_directory."/".fnamemodify(a:url, ":t:r")
 	let output = output_dir."/".fnamemodify(a:url, ":t")
 	if !isdirectory(output_dir)
-		call mkdir(output_dir)
+		call mkdir(output_dir, "p")
 	endif
 	if !executable(g:sugarpot_curl)
 		echoerr "Please install ".g:sugarpot_curl
