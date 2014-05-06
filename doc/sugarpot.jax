@@ -44,17 +44,28 @@
 	:SugarpotPreview http://www.vim.org/images/vim_drill_small.JPG
 <
 
+設定
+Example: >
+	" 描画する画像のフォントの設定
+	" フォントサイズ = 1ドットとして描画される
+	" Windows
+	let g:sugarpot_font = "MS_Gothic:h1"
+
+	" 描画サイズ
+	let g:sugarpot_convert_resize = "50%x34%"
+<
+
 
 ==============================================================================
-必要な外部コマンド				*sugarpot-require*
+必要なもの			*sugarpot-require*
 
-- start
-	gvim を立ち上げる時に使用します。
+- プラグイン
+ - vimproc.vim : http://github.com/Shougo/vimproc
 
-- convert
-	画像ファイルを XPM ファイルに変換する時に使用します。
-
-- curl
+- 外部コマンド
+ - convert
+ 	画像ファイルを XPM ファイルに変換する時に使用します。
+ - curl
 	Web から画像ファイルをダウンロードする時に使用します。
 
 
@@ -181,9 +192,12 @@ g:g:sugarpot_default_servername 		*g:sugarpot_default_servername*
 
 g:sugarpot_font					*g:sugarpot_font*
 	画像を描画する際に使用するフォントです。
-	これに設定されている値が 'guifont' に設定されます。
+	これに設定されている値がプレビュー時の 'guifont' に設定されます。
 	Default: >
-		let g:sugarpot_font = "MS_Gothic:h1"
+		" gui_gtk2
+		let g:sugarpot_font = "serif\\ 1"
+		" それ以外
+		let g:sugarpot_font = "serif:1"
 	<
 
 g:sugarpot_xpm_cache_directory 			*g:sugarpot_xpm_cache_directory*
@@ -212,6 +226,7 @@ g:sugarpot_convert 				*g:sugarpot_convert*
 
 g:sugarpot_convert_resize 			*g:sugarpot_convert_resize*
 	convert の -resize に渡される値です。
+	縦長や横長になった場合にこのオプションで調整を行ってください。
 	|sugarpot_convert_cmd_option| とは別に設定されるので注意して下さい。
 	
 	例: >
@@ -223,7 +238,7 @@ g:sugarpot_convert_resize 			*g:sugarpot_convert_resize*
 	<
 
 	Default: >
-		let g:sugarpot_convert_resize = "50%"
+		let g:sugarpot_convert_resize = "50%x34%"
 	<
 
 g:sugarpot_convert_cmd_option			*g:sugarpot_convert_cmd_option*

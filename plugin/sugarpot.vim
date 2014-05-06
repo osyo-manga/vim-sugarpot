@@ -8,14 +8,21 @@ set cpo&vim
 
 
 let g:sugarpot_default_servername  = get(g:, "g:sugarpot_default_servername", "sugarpot_image_preview_server")
-let g:sugarpot_font                = get(g:, "sugarpot_font", &guifont.":h1")
+if has("gui_gtk2")
+	let g:sugarpot_font                = get(g:, "sugarpot_font", "serif\\ 1")
+else getfontname("MS_Gothic") != ""
+	let g:sugarpot_font                = get(g:, "sugarpot_font", "MS_Gothic:1")
+else
+	let g:sugarpot_font                = get(g:, "sugarpot_font", "serif:1")
+endif
+
 let g:sugarpot_xpm_cache_directory = get(g:, "sugarpot_xpm_cache_directory", $TEMP)
 
 let g:sugarpot_gvim            = get(g:, "sugarpot_gvim", "gvim")
 let g:sugarpot_gvim_cmd_option = get(g:, "sugarpot_gvim_cmd_option", "-n -u NONE -U NONE -i NONE")
 
 let g:sugarpot_convert            = get(g:, "sugarpot_convert", "convert")
-let g:sugarpot_convert_resize     = get(g:, "sugarpot_convert_resize", "50%")
+let g:sugarpot_convert_resize     = get(g:, "sugarpot_convert_resize", "50%x34%")
 let g:sugarpot_convert_cmd_option = get(g:, "sugarpot_convert_cmd_option", "convert")
 
 let g:sugarpot_convert_cmd_option = get(g:, "sugarpot_convert_cmd_option", "convert")
