@@ -10,7 +10,7 @@ set cpo&vim
 let g:sugarpot_default_servername  = get(g:, "g:sugarpot_default_servername", "sugarpot_image_preview_server")
 if has("gui_gtk2")
 	let g:sugarpot_font                = get(g:, "sugarpot_font", "serif\\ 1")
-else getfontname("MS_Gothic") != ""
+elseif getfontname("MS_Gothic") != ""
 	let g:sugarpot_font                = get(g:, "sugarpot_font", "MS_Gothic:1")
 else
 	let g:sugarpot_font                = get(g:, "sugarpot_font", "serif:1")
